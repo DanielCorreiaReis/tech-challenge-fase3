@@ -1,0 +1,111 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "mount_file_id": "1cOxWgLY6TanTi_opfrSsJnzxgV4J6YO6",
+      "authorship_tag": "ABX9TyMq1r9jkmqBKkucqV5408Kl",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/DanielCorreiaReis/tech-challenge-fase3/blob/main/Projeto\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": 3,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "TLYSMMtdwvQ0",
+        "outputId": "4cf29ae9-7300-4843-f5f7-eb7a4a5348be"
+      },
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Drive already mounted at /content/drive; to attempt to forcibly remount, call drive.mount(\"/content/drive\", force_remount=True).\n"
+          ]
+        }
+      ],
+      "source": [
+        "#Conexão com o Google Drive\n",
+        "import json  # Importando o módulo JSON\n",
+        "from google.colab import drive\n",
+        "drive.mount('/content/drive')"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Caminho do arquivo no Google Drive\n",
+        "input_file = \"/content/drive/MyDrive/FIAP/trn.json\"\n",
+        "output_file = \"/content/drive/MyDrive/FIAP/trn_filtered.json\"\n",
+        "\n",
+        "# Processamento do JSON em chunks para lidar com grandes volumes\n",
+        "filtered_records = []\n",
+        "max_records = 200000\n",
+        "\n",
+        "with open(input_file, \"r\") as f:\n",
+        "    for line in f:\n",
+        "        try:\n",
+        "            record = json.loads(line)  # Converte a linha JSON em dicionário\n",
+        "\n",
+        "            # Filtrar apenas registros que têm todas as colunas preenchidas\n",
+        "            if all(record.get(key) for key in [\"uid\", \"title\", \"content\"]):\n",
+        "                filtered_records.append({\n",
+        "                    \"uid\": record[\"uid\"],\n",
+        "                    \"title\": record[\"title\"],\n",
+        "                    \"content\": record[\"content\"]\n",
+        "                })\n",
+        "\n",
+        "            # Interrompe ao atingir o limite de 200 mil registros\n",
+        "            if len(filtered_records) >= max_records:\n",
+        "                break\n",
+        "        except json.JSONDecodeError:\n",
+        "            continue  # Ignorar linhas corrompidas\n",
+        "\n",
+        "# Salvar os registros filtrados em um novo JSON\n",
+        "with open(output_file, \"w\") as f:\n",
+        "    json.dump(filtered_records, f, indent=4)\n",
+        "\n",
+        "print(f\"Arquivo salvo: {output_file}\")"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "3uh07ZRGwxwR",
+        "outputId": "8350e06b-2660-48c7-f50d-7d1fa385beef"
+      },
+      "execution_count": 4,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Arquivo salvo: /content/drive/MyDrive/FIAP/trn_filtered.json\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
