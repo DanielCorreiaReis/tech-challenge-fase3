@@ -1,4 +1,4 @@
-# 📚 Fine-Tuning de LLM para Geração e Resumo de Textos  
+# 📚 Fine-Tuning de LLM para Geração e Resumo de Livros
 
 Este notebook do **Google Colab** implementa o fine-tuning de um **Large Language Model (LLM)** utilizando **UnsLoTH** e **LoRA**, otimizando a geração de descrições de livros.  
 
